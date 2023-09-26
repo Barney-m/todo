@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "todo.app.env",
+    "type": "java.lang.String",
+    "description": "A description for 'todo.app.env'"
+  },
+  {
+    "name": "default.date.format",
+    "type": "java.lang.String",
+    "description": "A description for 'default.date.format'"
+  },
+  {
+    "name": "default.date.time.format",
+    "type": "java.lang.String",
+    "description": "A description for 'default.date.time.format'"
+  }
+]}
