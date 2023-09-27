@@ -20,13 +20,6 @@ import jakarta.persistence.TemporalType;
 public class CreationInfo {
 	
 	/**
-	 * Created By
-	 */
-	@Column(name = "created_by", nullable = false)
-	@JsonProperty(access = Access.READ_ONLY)
-	protected String createdBy = "system";
-	
-	/**
 	 * Created At
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
@@ -35,33 +28,12 @@ public class CreationInfo {
 	protected Date createdAt = new Date();
 	
 	/**
-	 * Updated By
-	 */
-	@Column(name = "updated_by", nullable = false)
-	@JsonProperty(access = Access.READ_ONLY)
-	protected String updatedBy = "system";
-	
-	/**
 	 * Updated At
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at", nullable = false)
 	@JsonProperty(access = Access.READ_ONLY)
 	protected Date updatedAt = new Date();
-
-	/**
-	 * @return the createdBy
-	 */
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	/**
-	 * @param createdBy the createdBy to set
-	 */
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
 
 	/**
 	 * @return the createdAt
@@ -75,20 +47,6 @@ public class CreationInfo {
 	 */
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	/**
-	 * @return the updatedBy
-	 */
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	/**
-	 * @param updatedBy the updatedBy to set
-	 */
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
 	}
 
 	/**
