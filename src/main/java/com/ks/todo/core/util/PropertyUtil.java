@@ -52,5 +52,9 @@ public class PropertyUtil extends BaseEnvUtil {
 	public static String getDefaultParseDateFormat() {
 		return (String) getProperty("default.parse.date.format", "YYYY-MM-DD");
 	}
+	
+	public static String getResourceServerUri() {
+		return (String) getProperty("spring.security.oauth2.resourceserver.jwt.issuer-url", "");
+	}
 
 }

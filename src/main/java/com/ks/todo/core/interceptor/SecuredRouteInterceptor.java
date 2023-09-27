@@ -1,15 +1,18 @@
 package com.ks.todo.core.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ks.todo.auth.repo.UserAttributeRepo;
 import com.ks.todo.core.annotation.SecuredRoute;
+import com.ks.todo.core.exception.SvcException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecuredRouteInterceptor implements HandlerInterceptor {
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	protected UserAttributeRepo userAttributeRepo;
 
 	/**
 	 * @see org.springframework.web.servlet.HandlerInterceptor#preHandle(HttpServletRequest,
@@ -39,7 +42,19 @@ public class SecuredRouteInterceptor implements HandlerInterceptor {
 		if (handler instanceof HandlerMethod) {
 			SecuredRoute authed = ((HandlerMethod) handler).getMethodAnnotation(SecuredRoute.class);
 
-			//TODO: OAuth2 Validation
+			// Not Annotated
+			if (null == authed) {
+				authed = ((HandlerMethod) handler).getMethod().getDeclaringClass().getAnnotation(SecuredRoute.class);
+			}
+
+			// Annotated
+			if (null != authed) {
+				
+				if (null == SecurityContextHolder.getContext().getAuthentication() || !SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+					throw new SvcException("Not Authorized!");
+				}
+				
+			}
 
 		}
 		return true;
@@ -63,4 +78,7 @@ public class SecuredRouteInterceptor implements HandlerInterceptor {
 			@Nullable Exception ex) throws Exception {
 	}
 
+	private RestTemplate initRestTemplate(String token) {
+		return new RestTemplateBuilder().defaultHeader("Authorization", "Bearer " + token).build();
+	}
 }

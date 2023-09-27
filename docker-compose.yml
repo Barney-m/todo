@@ -1,10 +1,29 @@
 version: '3'
 
+volumes:
+  todo-db:
+
 services:
   todo-spring-be:
     image: todo-spring-be-img:latest
     build:
       context: ./
       dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://todo-db:3306/todo_db?useMysqlMetadata=true
     ports:
-      - "8791:8791"
+      - "8081:8081"
+    depends_on:
+      - todo-db
+  todo-db:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_USER=todo_user
+      - MARIADB_PASSWORD=todo_user
+      - MARIADB_DATABASE=todo_db
+    volumes:
+      - todo-db:/var/lib/mysql
+      - ./artifact:/docker-entrypoint-initdb.d
