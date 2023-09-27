@@ -71,3 +71,14 @@ hibernate {
 	}
 }
 
+jar {
+	manifest {
+		attributes 'TODO-APP': 'com.ks.todo.TodoApplication'
+	}
+}
+
+bootJar {
+	archiveBaseName = 'todo'
+    archiveVersion = '1.0.0'
+    archiveFileName = 'todo.jar'
+}

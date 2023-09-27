@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  todo-spring-be:
+    image: todo-spring-be-img:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8791:8791"
