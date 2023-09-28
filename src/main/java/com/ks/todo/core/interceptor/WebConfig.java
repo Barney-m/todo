@@ -11,14 +11,10 @@ public class WebConfig implements WebMvcConfigurer {
     
     @Autowired
     LoggerInterceptor loggerInterceptor;
-
-    @Autowired
-    SecuredRouteInterceptor securedRouteInterceptor;
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggerInterceptor).addPathPatterns("/**");
-        registry.addInterceptor(securedRouteInterceptor).addPathPatterns("/**");
     }
     
     @Override

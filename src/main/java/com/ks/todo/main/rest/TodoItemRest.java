@@ -34,6 +34,11 @@ public class TodoItemRest {
 	@Autowired
 	protected TodoSvc todoSvc;
 
+	/**
+	 * Find TODO Item
+	 * 
+	 * @return List<TodoItem>
+	 */
 	@Operation(summary = "Find TODO Items", description = "Find TODO Items by Username")
 	@GetMapping
 	public List<TodoItem> findTodoItem() {
@@ -41,18 +46,35 @@ public class TodoItemRest {
 		return todoSvc.findTodoItemsByFilterStatus(httpSecuritySvc.getUsername());
 	}
 
+	/**
+	 * Add TODO Item
+	 * 
+	 * @param todoItem
+	 * @return TodoItem
+	 */
 	@Operation(summary = "Add TODO Item", description = "Add TODO Item")
 	@PostMapping
 	public TodoItem addTodoItem(@RequestBody TodoItem todoItem) {
 		return todoSvc.addTodoItem(todoItem, httpSecuritySvc.getUsername());
 	}
 
+	/**
+	 * Delete TODO Item
+	 * 
+	 * @param itemId
+	 */
 	@Operation(summary = "Delete TODO Item", description = "Delete TODO Item")
 	@PostMapping("/{itemId}/delete")
 	public void deleteTodoItem(@PathVariable Long itemId) {
 		todoSvc.deleteTodoItem(itemId, httpSecuritySvc.getUsername());
 	}
 
+	/**
+	 * Mark TODO Item as Completed
+	 * 
+	 * @param itemId
+	 * @return TodoItem
+	 */
 	@Operation(summary = "Mark TODO Item As Completed", description = "Mark TODO item as completed")
 	@PostMapping("/{itemId}/markAsComplete")
 	public TodoItem markAsComplete(@PathVariable Long itemId) {
