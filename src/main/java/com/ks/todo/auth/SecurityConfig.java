@@ -60,7 +60,7 @@ public class SecurityConfig {
 	@Bean
 	@Order(2)
 	public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().addFilterBefore(oAuth2GitHubAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
+		http.cors().and().csrf().disable().addFilterBefore(oAuth2GitHubAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
 				.authorizeHttpRequests(request -> request.anyRequest().authenticated()).formLogin().disable()
 				.oauth2Login().defaultSuccessUrl("/auth/login/success");
 

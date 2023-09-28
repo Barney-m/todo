@@ -15,11 +15,14 @@ import com.ks.todo.main.bean.TodoItem;
 import com.ks.todo.main.bean.svc.TodoSvc;
 import com.ks.todo.main.repo.TodoItemRepo;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 
 @Transactional
 @RestController
 @RequestMapping("/todo")
+@Tag(name = "TODO Item", description = "TODO Item APIs")
 public class TodoItemRest {
 
 	@Autowired
@@ -31,22 +34,26 @@ public class TodoItemRest {
 	@Autowired
 	protected TodoSvc todoSvc;
 
+	@Operation(summary = "Find TODO Items", description = "Find TODO Items by Username")
 	@GetMapping
 	public List<TodoItem> findTodoItem() {
 		// To get username from context holder
 		return todoSvc.findTodoItemsByFilterStatus(httpSecuritySvc.getUsername());
 	}
 
+	@Operation(summary = "Add TODO Item", description = "Add TODO Item")
 	@PostMapping
 	public TodoItem addTodoItem(@RequestBody TodoItem todoItem) {
 		return todoSvc.addTodoItem(todoItem, httpSecuritySvc.getUsername());
 	}
 
+	@Operation(summary = "Delete TODO Item", description = "Delete TODO Item")
 	@PostMapping("/{itemId}/delete")
 	public void deleteTodoItem(@PathVariable Long itemId) {
 		todoSvc.deleteTodoItem(itemId, httpSecuritySvc.getUsername());
 	}
 
+	@Operation(summary = "Mark TODO Item As Completed", description = "Mark TODO item as completed")
 	@PostMapping("/{itemId}/markAsComplete")
 	public TodoItem markAsComplete(@PathVariable Long itemId) {
 		return todoSvc.markAsComplete(itemId, httpSecuritySvc.getUsername());
