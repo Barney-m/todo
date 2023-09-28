@@ -12,11 +12,17 @@ import com.ks.todo.core.svc.HttpSecuritySvc;
 @Service
 public class HttpSecuritySvcImpl implements HttpSecuritySvc {
 
+	/**
+	 * @see com.ks.todo.core.svc.HttpSecuritySvc#getAuthentication()
+	 */
 	@Override
 	public Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
 
+	/**
+	 * @see com.ks.todo.core.svc.HttpSecuritySvc#getUsername()
+	 */
 	@Override
 	public String getUsername() {
 		if (null != getAuthentication()) {

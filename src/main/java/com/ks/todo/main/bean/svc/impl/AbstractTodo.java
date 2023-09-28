@@ -9,6 +9,13 @@ import com.ks.todo.main.bean.TodoItem;
 
 public abstract class AbstractTodo {
 
+	/**
+	 * Validate TODO Item Owner for List Items
+	 * 
+	 * @param items
+	 * @param itemId
+	 * @param username
+	 */
 	public void validateTodoItemOwner(List<TodoItem> items, final Long itemId, final String username) {
 		boolean found = false;
 
@@ -28,6 +35,13 @@ public abstract class AbstractTodo {
 		}
 	}
 
+	/**
+	 * Validate TODO Item Owner for Single Item
+	 * 
+	 * @param items
+	 * @param itemId
+	 * @param username
+	 */
 	public void validateTodoItemOwner(TodoItem item, final Long itemId, final String username) {
 		if (null == item) {
 			throw new SvcException("TODO Item not found");
