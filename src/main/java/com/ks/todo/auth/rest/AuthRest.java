@@ -1,6 +1,7 @@
 package com.ks.todo.auth.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ks.todo.auth.bean.User;
 import com.ks.todo.auth.bean.UserAttribute;
+import com.ks.todo.auth.constant.AuthConstant;
 import com.ks.todo.auth.repo.UserAttributeRepo;
 import com.ks.todo.auth.repo.UserRepo;
 import com.ks.todo.core.ClassObjFactory;
+import com.ks.todo.core.exception.SvcException;
 
 import jakarta.transaction.Transactional;
 
@@ -25,10 +28,10 @@ public class AuthRest {
 
 	@Autowired
 	protected OAuth2AuthorizedClientService clientService;
-	
+
 	@Autowired
 	protected UserRepo userRepo;
-	
+
 	@Autowired
 	protected UserAttributeRepo userAttributeRepo;
 
@@ -52,18 +55,26 @@ public class AuthRest {
 	private void saveOAuth2User(OAuth2AuthorizedClient client, OAuth2AuthenticationToken oAuthToken) {
 		Object principal = oAuthToken.getPrincipal();
 		if (principal instanceof DefaultOAuth2User) {
-			User user = ClassObjFactory.newInstance(User.class);
-			user.setFullName(((DefaultOAuth2User) principal).getAttribute("name"));
-			user.setUsername(null != ((DefaultOAuth2User) principal).getAttribute("email")
+			String username = null != ((DefaultOAuth2User) principal).getAttribute("email")
 					? ((DefaultOAuth2User) principal).getAttribute("email")
-					: ((DefaultOAuth2User) principal).getAttribute("login"));
-			user.setUserStatus("A");
-			user = userRepo.save(user);
-			
-			UserAttribute userAttr = ClassObjFactory.newInstance(UserAttribute.class);
-			userAttr.setProvider("GITHUB");
-			userAttr.setUsername(user.getUsername());
-			userAttributeRepo.save(userAttr);
+					: ((DefaultOAuth2User) principal).getAttribute("login");
+
+			User user = userRepo.findByUsername(username);
+
+			if (null == user) {
+				user = ClassObjFactory.newInstance(User.class);
+				user.setFullName(((DefaultOAuth2User) principal).getAttribute("name"));
+				user.setUsername(username);
+				user.setUserStatus(AuthConstant.USER_STATUS_ACTIVE);
+				user = userRepo.save(user);
+
+				UserAttribute userAttr = ClassObjFactory.newInstance(UserAttribute.class);
+				userAttr.setProvider(CommonOAuth2Provider.GITHUB.name());
+				userAttr.setUsername(user.getUsername());
+				userAttributeRepo.save(userAttr);
+			}
+		} else {
+			throw new SvcException("Failed to login");
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.ks.todo.auth;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,11 +25,12 @@ public class OAuth2GitHubAuthenticationFilter extends OncePerRequestFilter {
 
 		String xAuth = request.getHeader("Authorization");// here is your token value
 		// if Authentication Header not starts with Bearer
-		if (null != xAuth || xAuth.startsWith("Bearer ") && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (null != xAuth && xAuth.startsWith("Bearer ") && SecurityContextHolder.getContext().getAuthentication() == null) {
 			String token = xAuth.substring(7, xAuth.length());
 			
 			RestTemplate restTemplate = initRestTemplate(token);
-			Object userObj = restTemplate.getForObject("https://api.github.com/user", Object.class);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> userObj = (Map<String, Object>) restTemplate.getForObject("https://api.github.com/user", Object.class);
 
 			if (null != userObj) {
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userObj,
@@ -37,9 +39,9 @@ public class OAuth2GitHubAuthenticationFilter extends OncePerRequestFilter {
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authToken);
 			}
-			
-			filterChain.doFilter(request, response);
 		}
+		
+		filterChain.doFilter(request, response);
 	}
 	
 	private RestTemplate initRestTemplate(String token) {

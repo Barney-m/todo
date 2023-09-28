@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.ks.todo.core.bean.BaseInfo;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
@@ -19,17 +21,13 @@ public class TodoItem extends BaseInfo implements Serializable {
 	 * Item ID
 	 */
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long itemId;
 	
 	/**
 	 * Username / Email
 	 */
 	protected String username;
-	
-	/**
-	 * Item Category ID
-	 */
-	protected Long itemCategoryId;
 	
 	/**
 	 * Item Title
@@ -60,14 +58,6 @@ public class TodoItem extends BaseInfo implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public Long getItemCategoryId() {
-		return itemCategoryId;
-	}
-
-	public void setItemCategoryId(Long itemCategoryId) {
-		this.itemCategoryId = itemCategoryId;
 	}
 
 	public String getItemTitle() {
