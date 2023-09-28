@@ -34,7 +34,7 @@ public class TodoItemRest {
 	@GetMapping
 	public List<TodoItem> findTodoItem() {
 		// To get username from context holder
-		return todoItemRepo.findByUsername(httpSecuritySvc.getUsername());
+		return todoSvc.findTodoItemsByFilterStatus(httpSecuritySvc.getUsername());
 	}
 
 	@PostMapping

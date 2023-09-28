@@ -1,5 +1,9 @@
 package com.ks.todo.main.bean.svc.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,30 @@ public class TodoSvcImpl extends AbstractTodo implements TodoSvc {
 
 	@Autowired
 	protected TodoItemRepo todoItemRepo;
+	
+	/**
+	 * @see com.ks.todo.main.bean.svc.TodoSvc#findTodoItems(String)
+	 */
+	@Override
+	public List<TodoItem> findTodoItems(String username) {
+		return findTodoItems(username);
+	}
+
+	/**
+	 * @see com.ks.todo.main.bean.svc.TodoSvc#findTodoItemsByFilterStatus(String, String...)
+	 */
+	@Override
+	public List<TodoItem> findTodoItemsByFilterStatus(String username, String... statuses) {
+		if (StringUtils.isEmpty(username)) {
+			throw new SvcException("User Authorization Required");
+		}
+
+		if (!CollectionUtils.sizeIsEmpty(statuses)) {
+			return todoItemRepo.findByUsernameAndItemStatusNotIn(username, Arrays.asList(statuses));
+		}
+		
+		return todoItemRepo.findByUsername(username);
+	}
 
 	/**
 	 * @see com.ks.todo.main.bean.svc.TodoSvc#addTodoItem(TodoItem, String)
