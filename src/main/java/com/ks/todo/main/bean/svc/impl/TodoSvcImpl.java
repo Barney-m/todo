@@ -21,7 +21,7 @@ public class TodoSvcImpl extends AbstractTodo implements TodoSvc {
 	 */
 	@Override
 	public TodoItem addTodoItem(TodoItem item2Add, String username) {
-		if (StringUtils.isBlank(username)) {
+		if (StringUtils.isEmpty(username)) {
 			throw new SvcException("User Authorization Required");
 		}
 
