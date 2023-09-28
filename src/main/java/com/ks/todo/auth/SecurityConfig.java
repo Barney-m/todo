@@ -62,7 +62,7 @@ public class SecurityConfig {
 	public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().addFilterBefore(oAuth2GitHubAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
 				.authorizeHttpRequests(request -> request.anyRequest().authenticated()).formLogin().disable()
-				.oauth2Login().defaultSuccessUrl("/auth/login/success");
+				.oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/auth/login/success", true));
 
 		return http.build();
 	}
