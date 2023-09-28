@@ -1,8 +1,27 @@
 package com.ks.todo.main.bean.svc;
 
+import java.util.List;
+
 import com.ks.todo.main.bean.TodoItem;
 
 public interface TodoSvc {
+	
+	/**
+	 * Find TODO Items
+	 * 
+	 * @param username
+	 * @return List<TodoItem>
+	 */
+	List<TodoItem> findTodoItems(String username);
+	
+	/**
+	 * Find TODO Items by Filtering Status
+	 * 
+	 * @param username
+	 * @param statuses
+	 * @return List<TodoItem>
+	 */
+	List<TodoItem> findTodoItemsByFilterStatus(String username, String ...statuses);
 	
 	/**
 	 * Add TODO Item

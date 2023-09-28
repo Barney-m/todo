@@ -25,4 +25,13 @@ public interface TodoItemRepo extends JpaRepository<TodoItem, Long> {
 	 * @return TodoItem
 	 */
 	TodoItem findByItemId(Long itemId);
+	
+	/**
+	 * Find By Username and Filter by Item Status
+	 * 
+	 * @param username
+	 * @param statuses
+	 * @return List<TodoItem>
+	 */
+	List<TodoItem> findByUsernameAndItemStatusNotIn(String username, List<String> statuses);
 }
