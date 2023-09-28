@@ -6,6 +6,7 @@ volumes:
 services:
   todo-spring-be:
     image: todo-spring-be-img:latest
+    restart: always
     build:
       context: ./
       dockerfile: Dockerfile

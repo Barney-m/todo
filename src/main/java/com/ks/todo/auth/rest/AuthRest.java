@@ -19,7 +19,6 @@ import com.ks.todo.auth.repo.UserRepo;
 import com.ks.todo.core.ClassObjFactory;
 import com.ks.todo.core.exception.SvcException;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 
@@ -38,7 +37,6 @@ public class AuthRest {
 	@Autowired
 	protected UserAttributeRepo userAttributeRepo;
 
-	@Operation(summary = "Login Success", description = "Login Success")
 	@GetMapping("/login/success")
 	public String loginSuccess(Authentication authentication) {
 		OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
