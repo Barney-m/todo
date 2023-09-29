@@ -5,6 +5,7 @@ plugins {
 	id 'org.hibernate.orm' version '6.2.9.Final'
 	id 'org.graalvm.buildtools.native' version '0.9.27'
 	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'jacoco'
 }
 
 group = 'com.ks'
@@ -58,6 +59,11 @@ dependencies {
 tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
+	testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
+    }
 }
 
 tasks.named('asciidoctor') {
@@ -82,3 +88,4 @@ bootJar {
     archiveVersion = '1.0.0'
     archiveFileName = 'todo.jar'
 }
+

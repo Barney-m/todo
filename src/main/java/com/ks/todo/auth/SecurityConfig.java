@@ -28,10 +28,10 @@ public class SecurityConfig {
 
 	@Autowired
 	protected OAuth2GitHubAuthenticationFilter oAuth2GitHubAuthenticationFilter;
-	
-	@Value("http://${server.address}:${server.port}")
-	private String serverUri;
-	
+
+	@Value("${server.port}")
+	private String serverPort;
+
 	@Value("${spring.security.oauth2.client.registration.github.client-id}")
 	private String gitHubClientId;
 
@@ -49,18 +49,19 @@ public class SecurityConfig {
 	@Bean
 	@Order(2)
 	public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().addFilterBefore(oAuth2GitHubAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
+		http.cors().and().csrf().disable()
+				.addFilterBefore(oAuth2GitHubAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
 				.authorizeHttpRequests(request -> request.anyRequest().authenticated()).formLogin().disable()
 				.oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/auth/login/success", true));
 
 		return http.build();
 	}
-	
+
 	@Bean
 	public RegisteredClientRepository registeredClientRepository() {
 		RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString()).clientId("client")
 				.clientSecret("secret").scope(OidcScopes.OPENID).scope(OidcScopes.PROFILE)
-				.redirectUri(serverUri + "/login/oauth2/code/github/" + gitHubClientId)
+				.redirectUri("http://localhost:" + serverPort + "/login/oauth2/code/github/" + gitHubClientId)
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE).build();
 
