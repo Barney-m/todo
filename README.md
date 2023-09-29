@@ -7,6 +7,8 @@ TODO Application that use GitHub OAuth Authorization for accessing our resource 
 ```
 docker-compose up
 ```
+2. The Server will be up on Port 8081
+3. Accessible via http://127.0.0.1:8081
 
 ### Build Application
 1. Build the Application
