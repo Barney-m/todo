@@ -1,11 +1,12 @@
 version: '3'
+name: todo-container
 
 volumes:
   todo-db:
 
 services:
-  todo-spring-be:
-    image: todo-spring-be-img:latest
+  todo-app:
+    image: barney003/todo
     restart: always
     build:
       context: ./
@@ -17,7 +18,7 @@ services:
     depends_on:
       - todo-db
   todo-db:
-    image: mariadb
+    image: barney003/todo-db
     ports:
       - "3306:3306"
     environment:
